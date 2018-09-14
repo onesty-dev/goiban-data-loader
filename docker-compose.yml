@@ -1,0 +1,7 @@
+version: '3'
+
+services: 
+  goibandataloader:
+    build: ./
+    container_name: goibandataloader
+    restart: unless-stopped
