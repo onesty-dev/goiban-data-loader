@@ -36,11 +36,13 @@ public class ReadExcelScheduler {
 	@Scheduled(cron = "*/60 * * * * *")
 	public void updateBankData() {
 		final List<BankData> allBySource = bankDataService.getBankDataBySource("1");
-		bankDataService.removeAllBankData(allBySource);
 		List<BankData> insertList = excelLoaderService.getAllBankDataFromExcelFile();
-		insertList.forEach(element -> {
-			bankDataService.saveBankData(element);
-		});
+		if (!allBySource.isEmpty() && !insertList.isEmpty()) {
+			bankDataService.removeAllBankData(allBySource);
+			insertList.forEach(element -> {
+				bankDataService.saveBankData(element);
+			});
+		}
 	}
 
 }
