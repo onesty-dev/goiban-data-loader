@@ -1,17 +1,17 @@
-package de.onestydirect.openiban.data.loader.model;
+package de.onestydirect.openiban.data.loader.models;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "BANK_DATA")
+@Table(name = "BANK_DATA", indexes = {@Index(columnList = "id, source, bankcode, bic, country")})
 public class BankData {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
-	@JoinColumn(name = "source", nullable = false)
+	@Column(name = "source")
 	private String source;
 
 	@Column(name = "bankcode")
