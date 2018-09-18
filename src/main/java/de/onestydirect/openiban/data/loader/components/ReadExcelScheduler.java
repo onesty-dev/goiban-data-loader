@@ -33,7 +33,7 @@ public class ReadExcelScheduler {
 		this.bankDataService = bankDataService;
 	}
 
-	@Scheduled(cron = "*/10 * * * * *")
+	@Scheduled(cron = "*/60 * * * * *")
 	public void updateBankData() {
 		final List<BankData> allBySource = bankDataService.getBankDataBySource("1");
 		bankDataService.removeAllBankData(allBySource);

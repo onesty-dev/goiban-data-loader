@@ -102,7 +102,6 @@ public class ExcelLoaderServiceImpl implements ExcelLoaderService{
 	}
 
 	private List<BankData> filterBankDataList(final List<BankData> bankDataList) {
-		logger.info("Bankdata list filtered.");
 		return bankDataList.stream().filter(distinctByBankCode(BankData::getBankcode)).collect(Collectors.toList());
 	}
 
@@ -117,6 +116,7 @@ public class ExcelLoaderServiceImpl implements ExcelLoaderService{
 				entry.setBic("COBADEFFXXX");
 			}
 		});
+		logger.info("Bankdata list filtered.");
 		return bankDataList;
 	}
 }
