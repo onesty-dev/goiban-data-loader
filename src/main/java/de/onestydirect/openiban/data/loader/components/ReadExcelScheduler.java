@@ -2,6 +2,8 @@ package de.onestydirect.openiban.data.loader.components;
 
 import de.onestydirect.openiban.data.loader.models.BankData;
 import de.onestydirect.openiban.data.loader.models.BankDataRepository;
+import de.onestydirect.openiban.data.loader.services.BankDataService;
+import de.onestydirect.openiban.data.loader.services.BankDataServiceImpl;
 import de.onestydirect.openiban.data.loader.services.ExcelLoaderService;
 import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.*;
@@ -23,25 +25,25 @@ public class ReadExcelScheduler {
 
 	private ExcelLoaderService excelLoaderService;
 
-	private BankDataRepository bankDataRepository;
+	private BankDataService bankDataService;
 
 	private static final Logger log = LoggerFactory.getLogger(ReadExcelScheduler.class);
 
 	@Autowired
 	public ReadExcelScheduler(final ExcelLoaderService excelLoaderService,
-			final BankDataRepository bankDataRepository) {
+			final BankDataService bankDataService) {
 		this.excelLoaderService = excelLoaderService;
-		this.bankDataRepository = bankDataRepository;
+		this.bankDataService = bankDataService;
 	}
 
 	@Scheduled(cron = "*/10 * * * * *")
 	public void updateBankData() {
-		final List<BankData> allBySource = bankDataRepository.findAllBySource("1");
-		bankDataRepository.deleteAll(allBySource);
+		final List<BankData> allBySource = bankDataService.getBankDataBySource("1");
+		bankDataService.removeAllBankData(allBySource);
 		List<BankData> bankDataList = generateBankDataList();
 		List<BankData> insertList = hackSpecialBics(bankDataList);
 		insertList.forEach(element -> {
-			bankDataRepository.save(element);
+			bankDataService.saveBankData(element);
 		});
 	}
 
