@@ -1,6 +1,6 @@
 package de.onestydirect.openiban.data.loader.models;
 
-public class BankDataDto {
+public class BankDataDTO {
 
 	private String bankleitzahl;
 

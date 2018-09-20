@@ -1,13 +1,13 @@
 package de.onestydirect.openiban.data.loader.mapper;
 
-import de.onestydirect.openiban.data.loader.models.BankDataDto;
+import de.onestydirect.openiban.data.loader.models.BankDataDTO;
 import org.springframework.batch.item.excel.RowMapper;
 import org.springframework.batch.item.excel.support.rowset.RowSet;
 
-public class BankDataExcelRowMapper implements RowMapper<BankDataDto> {
+public class BankDataExcelRowMapper implements RowMapper<BankDataDTO> {
 	@Override
-	public BankDataDto mapRow(RowSet rs) throws Exception {
-		BankDataDto bankDataDto = new BankDataDto();
+	public BankDataDTO mapRow(RowSet rs) throws Exception {
+		BankDataDTO bankDataDto = new BankDataDTO();
 		bankDataDto.setBankleitzahl(rs.getColumnValue(0));
 		bankDataDto.setMerkmal(rs.getColumnValue(1));
 		bankDataDto.setBezeichnung(rs.getColumnValue(2));
