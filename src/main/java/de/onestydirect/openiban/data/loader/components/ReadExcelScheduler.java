@@ -7,6 +7,7 @@ import de.onestydirect.openiban.data.loader.services.ExcelLoaderServiceImpl;
 import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.item.ItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -37,12 +38,12 @@ public class ReadExcelScheduler {
 	public void updateBankData() {
 		final List<BankData> allBySource = bankDataService.getBankDataBySource("1");
 		List<BankData> insertList = excelLoaderService.getAllBankDataFromExcelFile();
-		if (!allBySource.isEmpty() && !insertList.isEmpty()) {
-			bankDataService.removeAllBankData(allBySource);
+		if (!insertList.isEmpty()) {
+			if (!allBySource.isEmpty())
+				bankDataService.removeAllBankData(allBySource);
 			insertList.forEach(element -> {
 				bankDataService.saveBankData(element);
 			});
 		}
 	}
-
 }
