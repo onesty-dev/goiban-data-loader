@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Component
+@PropertySource("classpath:excel.properties")
 public class ReadExcelScheduler {
 
 	private ExcelLoaderService excelLoaderService;
@@ -34,7 +36,7 @@ public class ReadExcelScheduler {
 		this.bankDataService = bankDataService;
 	}
 
-	@Scheduled(cron = "*/60 * * * * *")
+	@Scheduled(cron = "${database.to.xml.job.cron}")
 	public void updateBankData() {
 		final List<BankData> allBySource = bankDataService.getBankDataBySource("1");
 		List<BankData> insertList = excelLoaderService.getAllBankDataFromExcelFile();
