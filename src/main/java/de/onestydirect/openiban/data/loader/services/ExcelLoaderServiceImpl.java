@@ -6,8 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -17,8 +19,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-@Service
 @PropertySource("classpath:excel.properties")
+@Service
 public class ExcelLoaderServiceImpl implements ExcelLoaderService{
 
 	private Logger logger = LoggerFactory.getLogger(ExcelLoaderServiceImpl.class);
@@ -33,16 +35,11 @@ public class ExcelLoaderServiceImpl implements ExcelLoaderService{
 		this.resourceLoader=resourceLoader;
 	}
 
-	private Optional<Workbook> getWorkbook() {
-		try {
-			Workbook workbook = WorkbookFactory.create(resourceLoader.getResource(pathToExcelFile).getFile());
-			return Optional.of(workbook);
-		} catch (Exception e) {
-			logger.error(e.toString());
-			return Optional.empty();
-		}
-	}
-
+	/**
+	 * Reads a excel file specified in the properties and returns a list of BankData distinct by bankcode. Also a special BIC
+	 * is changed cause this BIC seems to be not correct in the past excel files provided by the Bundesbank.
+	 * @return List<BankData>
+	 */
 	@Override
 	public List<BankData> getAllBankDataFromExcelFile() {
 		List<BankData> bankDataList = new ArrayList<>();
@@ -99,6 +96,16 @@ public class ExcelLoaderServiceImpl implements ExcelLoaderService{
 		});
 		List<BankData> returnList = filterBankDataList(bankDataList);
 		return hackSpecialBics(returnList);
+	}
+
+	private Optional<Workbook> getWorkbook() {
+		try {
+			Workbook workbook = WorkbookFactory.create(resourceLoader.getResource(pathToExcelFile).getFile());
+			return Optional.of(workbook);
+		} catch (Exception e) {
+			logger.error(e.toString());
+			return Optional.empty();
+		}
 	}
 
 	private List<BankData> filterBankDataList(final List<BankData> bankDataList) {
