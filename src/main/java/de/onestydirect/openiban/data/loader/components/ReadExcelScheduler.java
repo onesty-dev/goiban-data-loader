@@ -3,22 +3,14 @@ package de.onestydirect.openiban.data.loader.components;
 import de.onestydirect.openiban.data.loader.models.BankData;
 import de.onestydirect.openiban.data.loader.services.BankDataService;
 import de.onestydirect.openiban.data.loader.services.ExcelLoaderService;
-import de.onestydirect.openiban.data.loader.services.ExcelLoaderServiceImpl;
-import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.item.ItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Component
 @PropertySource("classpath:excel.properties")
