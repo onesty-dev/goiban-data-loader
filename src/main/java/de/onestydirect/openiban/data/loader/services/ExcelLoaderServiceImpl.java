@@ -32,6 +32,12 @@ public class ExcelLoaderServiceImpl implements ExcelLoaderService {
 	@Value("${excel.file.delete}")
 	private boolean deleteExcelFileAfterRead;
 
+	@Value("${excel.list.distinct}")
+	private boolean distinctList;
+
+	@Value("${excel.list.hack}")
+	private boolean hackSpecialBic;
+
 	@Autowired
 	public ExcelLoaderServiceImpl(final ResourceLoader resourceLoader) {
 		this.resourceLoader = resourceLoader;
@@ -98,9 +104,19 @@ public class ExcelLoaderServiceImpl implements ExcelLoaderService {
 				}
 			}
 		});
-		List<BankData> returnList = filterBankDataList(bankDataList);
-		logger.info("Bankdata list filtered.");
-		return hackSpecialBics(returnList);
+		if (distinctList && hackSpecialBic) {
+			List<BankData> returnList = filterBankDataList(bankDataList);
+			logger.info("Bankdata list filtered.");
+			return hackSpecialBics(returnList);
+		}
+		if (distinctList) {
+			logger.info("Bankdata list filtered.");
+			return filterBankDataList(bankDataList);
+		}
+		if (hackSpecialBic) {
+			return hackSpecialBics(bankDataList);
+		}
+		return bankDataList;
 	}
 
 	private Optional<Workbook> getWorkbook() {
