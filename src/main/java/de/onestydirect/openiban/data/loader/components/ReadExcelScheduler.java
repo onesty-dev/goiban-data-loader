@@ -3,22 +3,14 @@ package de.onestydirect.openiban.data.loader.components;
 import de.onestydirect.openiban.data.loader.models.BankData;
 import de.onestydirect.openiban.data.loader.services.BankDataService;
 import de.onestydirect.openiban.data.loader.services.ExcelLoaderService;
-import de.onestydirect.openiban.data.loader.services.ExcelLoaderServiceImpl;
-import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.item.ItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Component
 @PropertySource("classpath:excel.properties")
@@ -28,7 +20,7 @@ public class ReadExcelScheduler {
 
 	private BankDataService bankDataService;
 
-	private static final Logger log = LoggerFactory.getLogger(ReadExcelScheduler.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReadExcelScheduler.class);
 
 	@Autowired
 	public ReadExcelScheduler(final ExcelLoaderService excelLoaderService, final BankDataService bankDataService) {
@@ -36,8 +28,9 @@ public class ReadExcelScheduler {
 		this.bankDataService = bankDataService;
 	}
 
-	@Scheduled(cron = "${database.to.xml.job.cron}")
+	@Scheduled(cron = "${excel.to.database.job.cron}")
 	public void updateBankData() {
+		logger.info("Cron job started.");
 		final List<BankData> allBySource = bankDataService.getBankDataBySource("1");
 		List<BankData> insertList = excelLoaderService.getAllBankDataFromExcelFile();
 		if (!insertList.isEmpty()) {

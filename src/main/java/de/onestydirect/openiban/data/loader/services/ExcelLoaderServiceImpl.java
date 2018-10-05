@@ -10,6 +10,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,9 +18,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-@Service
 @PropertySource("classpath:excel.properties")
-public class ExcelLoaderServiceImpl implements ExcelLoaderService{
+@Service
+public class ExcelLoaderServiceImpl implements ExcelLoaderService {
 
 	private Logger logger = LoggerFactory.getLogger(ExcelLoaderServiceImpl.class);
 
@@ -28,26 +29,26 @@ public class ExcelLoaderServiceImpl implements ExcelLoaderService{
 	@Value("${excel.file.path}")
 	private String pathToExcelFile;
 
+	@Value("${excel.file.delete}")
+	private boolean deleteExcelFileAfterRead;
+
 	@Autowired
-	public ExcelLoaderServiceImpl(final ResourceLoader resourceLoader){
-		this.resourceLoader=resourceLoader;
+	public ExcelLoaderServiceImpl(final ResourceLoader resourceLoader) {
+		this.resourceLoader = resourceLoader;
 	}
 
-	private Optional<Workbook> getWorkbook() {
-		try {
-			Workbook workbook = WorkbookFactory.create(resourceLoader.getResource(pathToExcelFile).getFile());
-			return Optional.of(workbook);
-		} catch (Exception e) {
-			logger.error(e.toString());
-			return Optional.empty();
-		}
-	}
-
+	/**
+	 * Reads a excel file specified in the properties and returns a list of BankData distinct by bankcode. Also a special BIC
+	 * is changed cause this BIC seems to be not correct in the past excel files provided by the Bundesbank.
+	 *
+	 * @return List<BankData>
+	 */
 	@Override
 	public List<BankData> getAllBankDataFromExcelFile() {
 		List<BankData> bankDataList = new ArrayList<>();
 		final Optional<Workbook> workbook = getWorkbook();
 		workbook.ifPresent(wb -> {
+			logger.info("Bankdata read.");
 			Iterator<Sheet> sheetIterator = wb.sheetIterator();
 			if (sheetIterator.hasNext()) {
 				DataFormatter dataFormatter = new DataFormatter();
@@ -98,7 +99,26 @@ public class ExcelLoaderServiceImpl implements ExcelLoaderService{
 			}
 		});
 		List<BankData> returnList = filterBankDataList(bankDataList);
+		logger.info("Bankdata list filtered.");
 		return hackSpecialBics(returnList);
+	}
+
+	private Optional<Workbook> getWorkbook() {
+		try {
+			File file = resourceLoader.getResource(pathToExcelFile).getFile();
+			Workbook workbook = WorkbookFactory.create(file);
+			if (file.exists() && deleteExcelFileAfterRead) {
+				if (file.delete()) {
+					System.out.println("File deleted successfully");
+				} else {
+					System.out.println("Fail to delete file");
+				}
+			}
+			return Optional.of(workbook);
+		} catch (Exception e) {
+			logger.error(e.toString());
+			return Optional.empty();
+		}
 	}
 
 	private List<BankData> filterBankDataList(final List<BankData> bankDataList) {
@@ -116,7 +136,7 @@ public class ExcelLoaderServiceImpl implements ExcelLoaderService{
 				entry.setBic("COBADEFFXXX");
 			}
 		});
-		logger.info("Bankdata list filtered.");
+		logger.info("Bankdata list hacked.");
 		return bankDataList;
 	}
 }
