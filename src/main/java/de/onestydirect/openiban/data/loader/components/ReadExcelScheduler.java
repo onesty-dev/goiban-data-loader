@@ -20,7 +20,7 @@ public class ReadExcelScheduler {
 
 	private BankDataService bankDataService;
 
-	private static final Logger log = LoggerFactory.getLogger(ReadExcelScheduler.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReadExcelScheduler.class);
 
 	@Autowired
 	public ReadExcelScheduler(final ExcelLoaderService excelLoaderService, final BankDataService bankDataService) {
@@ -28,8 +28,9 @@ public class ReadExcelScheduler {
 		this.bankDataService = bankDataService;
 	}
 
-	@Scheduled(cron = "${database.to.xml.job.cron}")
+	@Scheduled(cron = "${excel.to.database.job.cron}")
 	public void updateBankData() {
+		logger.info("Cron job started.");
 		final List<BankData> allBySource = bankDataService.getBankDataBySource("1");
 		List<BankData> insertList = excelLoaderService.getAllBankDataFromExcelFile();
 		if (!insertList.isEmpty()) {
