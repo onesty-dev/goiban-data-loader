@@ -35,10 +35,12 @@ public class ReadExcelScheduler {
 		List<BankData> insertList = excelLoaderService.getAllBankDataFromExcelFile();
 		if (!insertList.isEmpty()) {
 			if (!allBySource.isEmpty())
+				logger.info("clear database");
 				bankDataService.removeAllBankData(allBySource);
 			insertList.forEach(element -> {
 				bankDataService.saveBankData(element);
 			});
+			logger.info("insert finished");
 		}
 	}
 }

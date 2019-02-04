@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk
 
-MAINTAINER onesty
+LABEL autor="Chris Wohlbrecht"
 
 
 ARG JAR_FILE=target/loader-0.0.2-SNAPSHOT.jar
