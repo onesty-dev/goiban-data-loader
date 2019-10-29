@@ -1,6 +1,6 @@
 package de.onestydirect.openiban.data.loader.components;
 
-import de.onestydirect.openiban.data.loader.models.BankData;
+import de.onestydirect.openiban.data.loader.model.BankData;
 import de.onestydirect.openiban.data.loader.services.BankDataService;
 import de.onestydirect.openiban.data.loader.services.ExcelLoaderService;
 import org.slf4j.Logger;

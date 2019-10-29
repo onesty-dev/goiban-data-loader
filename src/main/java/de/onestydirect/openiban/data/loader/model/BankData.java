@@ -1,4 +1,4 @@
-package de.onestydirect.openiban.data.loader.models;
+package de.onestydirect.openiban.data.loader.model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

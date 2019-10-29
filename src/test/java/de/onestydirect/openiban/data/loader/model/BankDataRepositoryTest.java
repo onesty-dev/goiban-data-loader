@@ -1,5 +1,6 @@
-package de.onestydirect.openiban.data.loader.models;
+package de.onestydirect.openiban.data.loader.model;
 
+import de.onestydirect.openiban.data.loader.model.repository.BankDataRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
