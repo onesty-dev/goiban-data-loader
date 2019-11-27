@@ -1,7 +1,7 @@
 package de.onestydirect.openiban.data.loader.services;
 
 import de.onestydirect.openiban.data.loader.LoaderApplication;
-import de.onestydirect.openiban.data.loader.models.BankData;
+import de.onestydirect.openiban.data.loader.model.BankData;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,4 +1,4 @@
-package de.onestydirect.openiban.data.loader.models;
+package de.onestydirect.openiban.data.loader.model;
 
 public class BankDataDto {
 

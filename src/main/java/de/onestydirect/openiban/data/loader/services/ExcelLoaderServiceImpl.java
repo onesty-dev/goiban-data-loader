@@ -1,6 +1,6 @@
 package de.onestydirect.openiban.data.loader.services;
 
-import de.onestydirect.openiban.data.loader.models.BankData;
+import de.onestydirect.openiban.data.loader.model.BankData;
 import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

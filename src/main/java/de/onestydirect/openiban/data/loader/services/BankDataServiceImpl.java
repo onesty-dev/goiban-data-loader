@@ -1,7 +1,7 @@
 package de.onestydirect.openiban.data.loader.services;
 
-import de.onestydirect.openiban.data.loader.models.BankData;
-import de.onestydirect.openiban.data.loader.models.BankDataRepository;
+import de.onestydirect.openiban.data.loader.model.BankData;
+import de.onestydirect.openiban.data.loader.model.repository.BankDataRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
