@@ -4,7 +4,7 @@ LABEL autor="Chris Wohlbrecht"
 
 ENV TZ=Europe/Berlin
 
-ARG JAR_FILE=target/loader-0.0.3-SNAPSHOT.jar
+ARG JAR_FILE=target/loader.jar
 ADD ${JAR_FILE} loader.jar
 
 USER 9000
