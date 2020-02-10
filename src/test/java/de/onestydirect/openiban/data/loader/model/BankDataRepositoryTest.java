@@ -1,23 +1,19 @@
 package de.onestydirect.openiban.data.loader.model;
 
-import de.onestydirect.openiban.data.loader.model.repository.BankDataRepository;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
-@DataJpaTest
-public class BankDataRepositoryTest {
+import de.onestydirect.openiban.data.loader.model.repository.BankDataRepository;
+import java.util.List;
+import javax.transaction.Transactional;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.context.SpringBootTest;
 
-	@Autowired
-	private TestEntityManager entityManager;
+@SpringBootTest
+@Transactional
+public class BankDataRepositoryTest {
 
 	@Autowired
 	private BankDataRepository bankDataRepository;
@@ -31,8 +27,8 @@ public class BankDataRepositoryTest {
 		bankData.setAlgorithm("09");
 		bankData.setSource("1");
 
-		entityManager.persist(bankData);
-		entityManager.flush();
+		bankDataRepository.save(bankData);
+		bankDataRepository.flush();
 
 		//when
 		List<BankData> foundBankData = bankDataRepository.findAllBySource(bankData.getSource());

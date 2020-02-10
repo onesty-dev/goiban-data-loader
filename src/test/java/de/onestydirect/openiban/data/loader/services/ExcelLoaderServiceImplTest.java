@@ -1,24 +1,19 @@
 package de.onestydirect.openiban.data.loader.services;
 
-import de.onestydirect.openiban.data.loader.LoaderApplication;
-import de.onestydirect.openiban.data.loader.model.BankData;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.onestydirect.openiban.data.loader.model.BankData;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = LoaderApplication.class)
+@SpringBootTest
 @TestPropertySource("classpath:excel-test.properties")
 public class ExcelLoaderServiceImplTest {
 
@@ -27,7 +22,7 @@ public class ExcelLoaderServiceImplTest {
 
 	private List<BankData> allBankDataFromExcelFile;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		allBankDataFromExcelFile = excelLoaderService.getAllBankDataFromExcelFile();
 	}
